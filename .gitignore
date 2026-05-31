@@ -1,0 +1,68 @@
+# ==========================================
+# macOS System Files
+# ==========================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon_
+._*
+.Spotlight-V100
+.Trashes
+*.icloud
+
+# ==========================================
+# Python / Django / DRF
+# ==========================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database (Keep your local DB local)
+*.sqlite3
+
+# Local environment variables / secrets
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django media and static directories
+# (Don't track user-uploaded media or gathered static files)
+/media/
+/staticfiles/
+
+# Static HTML/CSS/JS that might be generated
+*.log
+local_settings.py
+
+# ==========================================
+# IDEs and Editors (Optional but highly recommended)
+# ==========================================
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PyCharm / JetBrains
+.idea/
+
+# ==========================================
+# Testing & Coverage
+# ==========================================
+.htmlcov/
+.tox/
+.nosexy/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.mo
+*.pot
+*.log
