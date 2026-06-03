@@ -35,7 +35,7 @@ class Order(models.Model):
         max_length=10,
         choices=StatusChoices.choices, 
         default=StatusChoices.PENDING
-    )
+    ) 
 
     products = models.ManyToManyField(Product, through='OrderItem', related_name='orders')
 
