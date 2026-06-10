@@ -5,3 +5,8 @@
 ## For testing:
 - use test.py
 - use TestCase class where it has a self.client
+
+
+## JWT Auth
+- we use simplejwtauthentication as it doesn't need lookup in database
+- have userid in the payload of the token so doesn't need to lookup in the database

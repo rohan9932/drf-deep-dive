@@ -1,9 +1,10 @@
-GET http://localhost:8000/products/ HTTP/1.1
+GET http://localhost:8000/api/products/ HTTP/1.1
 
 ### 
 
-POST http://localhost:8000/products/ HTTP/1.1
+POST http://localhost:8000/api/products/ HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTEyODg5LCJpYXQiOjE3ODExMTI1ODksImp0aSI6ImY3MDc2MjUwNzFmMDQyMjJhYWIzMzQ0NjRkNGQzNWRlIiwidXNlcl9pZCI6IjIifQ.1BolMPkls2O3JPs433PHPKqmWF4DUIDNHtfwta37Khk
 
 {
   "name": "Television",
@@ -11,3 +12,19 @@ Content-Type: application/json
   "stock": 14,
   "description": "An amazing new TV."
 }
+
+
+###
+
+POST http://localhost:8000/api/token/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "01rohan",
+  "password": "1"
+}
+
+###
+
+GET http://localhost:8000/api/user-orders/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTEyODg5LCJpYXQiOjE3ODExMTI1ODksImp0aSI6ImY3MDc2MjUwNzFmMDQyMjJhYWIzMzQ0NjRkNGQzNWRlIiwidXNlcl9pZCI6IjIifQ.1BolMPkls2O3JPs433PHPKqmWF4DUIDNHtfwta37Khk
