@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'api',
-    'silk'
+    'silk',
+    'drf_spectacular',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -121,5 +123,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ], 
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'E-Commerce API',
+    'DESCRIPTION': 'A simple Product and Order API that helps us learn Django Rest Framework',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
