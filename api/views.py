@@ -8,6 +8,8 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
+from api.filters import ProductFilter
+
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -33,6 +35,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filterset_class = ProductFilter
 
     def get_permissions(self):
         # at default we are giving access to all

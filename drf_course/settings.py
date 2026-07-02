@@ -25,12 +25,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # dependencies
     'django_extensions',
     'rest_framework',
-    'api',
     'silk',
     'drf_spectacular',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'django_filters',
+
+    # our custom apps
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +130,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ], 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 
