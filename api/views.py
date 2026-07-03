@@ -1,6 +1,9 @@
+from django.contrib.auth.models import AbstractUser
 from django.db.models import Max
 from django.shortcuts import get_object_or_404
+from django.template.context_processors import request
 from django_filters.rest_framework import DjangoFilterBackend
+from pip._internal import req
 from rest_framework import filters, generics, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.pagination import PageNumberPagination
@@ -80,21 +83,32 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('items__product').all()
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = None # to disable pagination for specific view from global pagination
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
 
-    @action(
-        detail=False,
-        methods=['get'],
-        url_path='user-orders',
-        permission_classes=[IsAuthenticated], # for multiuser auth handle
-    )
-    def user_orders(self, request):
-        orders = self.get_queryset().filter(user=request.user)
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
+    # In all the actions the queryset filter is applied by normal users and admin
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if not self.request.user.is_staff:
+            qs = qs.filter(user=self.request.user) # filters data to see only normal user's itself's order
+        return qs
+
+
+    # it becomes redundant
+    ## as user based order is already handled in get_queryset()
+
+    # @action(
+    #     detail=False,
+    #     methods=['get'],
+    #     url_path='user-orders',
+    #     permission_classes=[IsAuthenticated], # for multiuser auth handle
+    # )
+    # def user_orders(self, request):
+    #     orders = self.get_queryset().filter(user=request.user)
+    #     serializer = OrderSerializer(orders, many=True)
+    #     return Response(serializer.data)
 
 
 # @api_view(['GET'])
