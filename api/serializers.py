@@ -41,6 +41,32 @@ class OrderItemSerializer(serializers.ModelSerializer):
         # fields = ['order_user', 'order_id']
 
 
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class OrderItemCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = OrderItem
+            fields = ['product', 'quantity']
+
+    items = OrderItemCreateSerializer(many=True)
+    order_id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['order_id', 'user', 'created_at', 'status', 'items']
+        extra_kwargs = {
+            'user': {'read_only':True}
+        }
+
+    def create(self, validated_data):
+        order_item_data = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+
+        for item in order_item_data:
+            OrderItem.objects.create(order=order, **item)
+
+        return order
+
+
 class OrderSerializer(serializers.ModelSerializer):
     order_id = serializers.UUIDField(read_only=True) # so that viewset doesn't want us to generate id
     # nested serializer -> viewing the items of this order from this 
@@ -50,7 +76,7 @@ class OrderSerializer(serializers.ModelSerializer):
     # eg. As it is fetching from OrderItem so order filed's related name 
     # must be named 'items'
     # handles OrderItem.objects.filter(order_id=order.id)
-    items = OrderItemSerializer(many=True, read_only=True) 
+    items = OrderItemSerializer(many=True, read_only=True)
     # if we don't use OrderItemSerializer it will just return the 
     # items id list  
 

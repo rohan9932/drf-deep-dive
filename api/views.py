@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from api.filters import InStockFilterBackend, OrderFilter, ProductFilter
 from api.models import Order, OrderItem, Product
 from api.serializers import (OrderSerializer, ProductInfoSerializer,
-                             ProductSerializer)
+                             ProductSerializer, OrderCreateSerializer)
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -80,6 +80,9 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
 
+
+### --- So we want to use OrderSerializer for get method and OrderCreateSerializer for POST method --- ###
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('items__product').all()
     serializer_class = OrderSerializer
@@ -88,12 +91,21 @@ class OrderViewSet(viewsets.ModelViewSet):
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
 
+    # dynamically change to OrderCreateSerializer if it's a post req
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return OrderCreateSerializer
+        return super().get_serializer_class()
+
     # In all the actions the queryset filter is applied by normal users and admin
     def get_queryset(self):
         qs = super().get_queryset()
         if not self.request.user.is_staff:
             qs = qs.filter(user=self.request.user) # filters data to see only normal user's itself's order
         return qs
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user) 
 
 
     # it becomes redundant
