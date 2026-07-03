@@ -13,6 +13,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from api.filters import ProductFilter, InStockFilterBackend
 
+from rest_framework.pagination import PageNumberPagination
+
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -36,7 +38,7 @@ from api.filters import ProductFilter, InStockFilterBackend
 #         return super().create(request, *args, **kwargs)
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.order_by('pk') # ordering for consistent pagination result
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
     filter_backends = [
@@ -47,6 +49,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     ]
     search_fields = ['=name', 'description'] # if we need exact match then '=' before the field name
     ordering_fields = ['name', 'price', 'stock']
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 1
+    pagination_class.page_size_query_param = 'size' # giving client a param to control how much data they wanna see in a page
+    pagination_class.max_page_size = 3
 
     def get_permissions(self):
         # at default we are giving access to all
