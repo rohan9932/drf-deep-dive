@@ -12,6 +12,7 @@ djangorestframework_simplejwt==5.5.1
 drf-spectacular==0.29.0
 gprof2dot==2025.4.14
 inflection==0.5.1
+isort==8.0.1
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 Markdown==3.10.2

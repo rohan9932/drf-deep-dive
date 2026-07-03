@@ -1,22 +1,17 @@
 from django.db.models import Max
 from django.shortcuts import get_object_or_404
-from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer
-from api.models import Product, Order, OrderItem
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-
-from api.filters import ProductFilter, InStockFilterBackend, OrderFilter
-
+from rest_framework import filters, generics, viewsets
+from rest_framework.decorators import action, api_view
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from rest_framework import viewsets
-from rest_framework.decorators import action
+from api.filters import InStockFilterBackend, OrderFilter, ProductFilter
+from api.models import Order, OrderItem, Product
+from api.serializers import (OrderSerializer, ProductInfoSerializer,
+                             ProductSerializer)
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
