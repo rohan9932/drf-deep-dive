@@ -15,6 +15,8 @@ from api.filters import ProductFilter, InStockFilterBackend
 
 from rest_framework.pagination import PageNumberPagination
 
+from rest_framework import viewsets
+
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -80,26 +82,33 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.prefetch_related('items__product').all()
+    serializer_class = OrderSerializer
+    permission_classes = [AllowAny]
+    pagination_class = None # to disable pagination for specific view from global pagination
+
+
 # @api_view(['GET'])
 # def order_list(request):
 #     orders = Order.objects.prefetch_related('items', 'items__product').all()
 #     serializer = OrderSerializer(orders, many=True)
 #     return Response(serializer.data)
 
-class OrderListAPIView(generics.ListAPIView):
-    queryset = Order.objects.prefetch_related('items', 'items__product').all()
-    serializer_class = OrderSerializer
-
-
-class UserOrderListAPIView(generics.ListAPIView):
-    queryset = Order.objects.prefetch_related('items', 'items__product').all()
-    serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self): #overriding the queryset
-        user = self.request.user
-        qs = super().get_queryset()
-        return qs.filter(user=user)
+# class OrderListAPIView(generics.ListAPIView):
+#     queryset = Order.objects.prefetch_related('items', 'items__product').all()
+#     serializer_class = OrderSerializer
+#
+#
+# class UserOrderListAPIView(generics.ListAPIView):
+#     queryset = Order.objects.prefetch_related('items', 'items__product').all()
+#     serializer_class = OrderSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def get_queryset(self): #overriding the queryset
+#         user = self.request.user
+#         qs = super().get_queryset()
+#         return qs.filter(user=user)
 
 
 # @api_view(['GET'])

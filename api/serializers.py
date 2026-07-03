@@ -42,6 +42,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    order_id = serializers.UUIDField(read_only=True) # so that viewset doesn't want us to generate id
     # nested serializer -> viewing the items of this order from this 
     # serializer 
     # N.B -> the var name must match the related name in the model -> because we 
