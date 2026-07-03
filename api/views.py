@@ -11,12 +11,12 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
-from api.filters import ProductFilter, InStockFilterBackend
+from api.filters import ProductFilter, InStockFilterBackend, OrderFilter
 
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework import viewsets
-
+from rest_framework.decorators import action
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -87,6 +87,19 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]
     pagination_class = None # to disable pagination for specific view from global pagination
+    filterset_class = OrderFilter
+    filter_backends = [DjangoFilterBackend]
+
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='user-orders',
+        permission_classes=[IsAuthenticated], # for multiuser auth handle
+    )
+    def user_orders(self, request):
+        orders = self.get_queryset().filter(user=request.user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
 
 # @api_view(['GET'])
