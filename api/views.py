@@ -12,9 +12,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.filters import InStockFilterBackend, OrderFilter, ProductFilter
-from api.models import Order, OrderItem, Product
+from api.models import Order, OrderItem, Product, User
 from api.serializers import (OrderSerializer, ProductInfoSerializer,
-                             ProductSerializer, OrderCreateSerializer)
+                             ProductSerializer, OrderCreateSerializer, UserSerializer)
 
 # api view decorator helps to get Request and send Response
 # rather than simple HttpRequest, HttpResponse
@@ -167,4 +167,11 @@ class ProductsInfoAPIView(APIView):
             'count': count,
             'max_price': max_price
         })
-        return Response(serializer.data) 
+        return Response(serializer.data)
+
+
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    pagination_class = None

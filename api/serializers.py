@@ -1,6 +1,14 @@
 from rest_framework import serializers
-from .models import Product, Order, OrderItem
+from .models import Product, Order, OrderItem, User
 from django.db import transaction
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        # using explicit fields is a better option
+        fields = ['username', 'email', 'is_staff']
+        # exclude = ['password', 'user_permissions']
 
 
 class ProductSerializer(serializers.ModelSerializer):
