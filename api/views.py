@@ -93,7 +93,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     # dynamically change to OrderCreateSerializer if it's a post req
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == 'create' or self.action == 'update':
             return OrderCreateSerializer
         return super().get_serializer_class()
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, Order, OrderItem
+from django.db import transaction
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -47,7 +48,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             model = OrderItem
             fields = ['product', 'quantity']
 
-    items = OrderItemCreateSerializer(many=True)
+    items = OrderItemCreateSerializer(many=True, required=False)
     order_id = serializers.UUIDField(read_only=True)
 
     class Meta:
@@ -59,12 +60,33 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         order_item_data = validated_data.pop('items')
-        order = Order.objects.create(**validated_data)
 
-        for item in order_item_data:
-            OrderItem.objects.create(order=order, **item)
+        with transaction.atomic():
+            order = Order.objects.create(**validated_data)
+
+            for item in order_item_data:
+                OrderItem.objects.create(order=order, **item)
 
         return order
+
+    def update(self, instance, validated_data):
+        order_item_data = validated_data.pop('items', None) # if no items provided None will be assigned
+
+        with transaction.atomic(): # if fails at any stage all steps rollback
+            instance = super().update(instance, validated_data) # updates the order and returns the order instance
+
+            if order_item_data is not None: # this update is usually handled based on custom requirement
+                # here we'll clear the items that were not mentioned in put request
+
+                # delete existing items
+                instance.items.all().delete()
+
+                # recreate with given items
+                for item in order_item_data:
+                    OrderItem.objects.create(order=instance, **item)
+
+        return instance
+
 
 
 class OrderSerializer(serializers.ModelSerializer):

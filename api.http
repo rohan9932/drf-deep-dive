@@ -69,7 +69,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ###
 GET http://localhost:8000/api/orders/5ef67642-946e-4338-b93d-9c14e172fe01/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzMDc0NjIyLCJpYXQiOjE3ODMwNzQzMjIsImp0aSI6ImI4YTE1ZTAyZDFmNjRjOGFhYTRhODgzNDFmYTE3MTE3IiwidXNlcl9pZCI6IjIifQ.-blTgVfP0gZZXUBqvAMo-ApdB5ojZZex-UwAcOTnXpE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzMTM2NDI2LCJpYXQiOjE3ODMxMzYxMjYsImp0aSI6Ijc4Y2FmM2I3YWI4MDQ2MjJhODQyN2FkNzJiNWM1NmE5IiwidXNlcl9pZCI6IjEifQ.SlQOTsL1ypBgv38Yd9Z675bxI1mqyG9lyxs8mbP8LHg
 
 
 ###
@@ -89,4 +89,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
       "quantity": 5
     }
   ]
+}
+
+
+###
+PUT http://localhost:8000/api/orders/5ef67642-946e-4338-b93d-9c14e172fe01/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzMTM4NDQxLCJpYXQiOjE3ODMxMzgxNDEsImp0aSI6IjNmNjc4YTAwYjA2YzQzZDU4NGU2YzE1MWMyM2I4MjU4IiwidXNlcl9pZCI6IjEifQ.74DMPtfveNGcqWmSRIHfnxocR4br11OVAxiED1oXMo8
+
+{
+  "status": "Confirmed"
 }
